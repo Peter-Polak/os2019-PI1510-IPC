@@ -9,15 +9,17 @@
 #include <sys/sem.h>
 #include <sys/shm.h> 
 
-struct sembuf
-{
- short sem_num;
- short sem_op;
- short sem_flg;
-} 
+// struct sembuf
+// {
+//  short sem_num;
+//  short sem_op;
+//  short sem_flg;
+// } 
 
 int main(int argc, char const *argv[])
 {
+    printf("Process \"proc_t\" started.\n");
+    
     int pipeR2Read = atoi(argv[1]);
     int shmemSM1 = atoi(argv[2]);
     int semaphoreS1 = atoi(argv[3]);
@@ -45,9 +47,10 @@ int main(int argc, char const *argv[])
     operation[1].sem_op = 1;
     operation[1].sem_flg = SEM_UNDO;
     
-    semop(semaphoreS1, &operation, 2);
+    semop(semaphoreS1, operation, 2);
     
     //Clean up and exit
     shmdt(sharedMemory);
+    printf("Process \"proc_t\" finished.\n");
     exit(0);
 }

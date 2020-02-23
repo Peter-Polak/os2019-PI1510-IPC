@@ -28,8 +28,10 @@ int proc_serv2(int udpPort);
 
 int main(int argc, char const *argv[])
 {
+    printf("Process \"zadanie\" started.\n");
+    
     //struct siginfo_t response;
-    struct int childStatus;
+    int childStatus;
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
@@ -50,9 +52,9 @@ int main(int argc, char const *argv[])
     int proc_p2ID = proc_p2(pipeR1[1]);
     int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
     
-    waitpid(proc_p1ID, &childStatus, NULL);
-    waitpid(proc_p2ID, &childStatus, NULL);
-    waitpid(proc_prID, &childStatus, NULL);
+    waitpid(proc_p1ID, &childStatus, 0);
+    waitpid(proc_p2ID, &childStatus, 0);
+    waitpid(proc_prID, &childStatus, 0);
     //---------------------------------------------------------------------------------------------
     
     
@@ -84,8 +86,8 @@ int main(int argc, char const *argv[])
     sigsuspend(&sigusrMask);
     int proc_tID = proc_t(pipeR2[0], shmemSM1, semaphoreS1);
 
-    waitpid(proc_tID, &childStatus, NULL);
-    waitpid(proc_sID, &childStatus, NULL);
+    waitpid(proc_tID, &childStatus, 0);
+    waitpid(proc_sID, &childStatus, 0);
     //---------------------------------------------------------------------------------------------
     
     
@@ -101,17 +103,18 @@ int main(int argc, char const *argv[])
     int proc_dID = proc_d(shmemSM2, semaphoreS2, tcpPort);
     int proc_serv2ID = proc_serv2(udpPort);
     
-    waitpid(proc_dID, &childStatus, NULL);
-    waitpid(proc_serv1ID, &childStatus, NULL);
-    waitpid(proc_serv2ID, &childStatus, NULL);
+    waitpid(proc_dID, &childStatus, 0);
+    waitpid(proc_serv1ID, &childStatus, 0);
+    waitpid(proc_serv2ID, &childStatus, 0);
     //---------------------------------------------------------------------------------------------
     
     //Clean up and exit
     //---------------------------------------------------------------------------------------------
     semctl(semaphoreS1, 0, IPC_RMID);
     semctl(semaphoreS2, 0, IPC_RMID);
-    shmctl(shmemSM1, IPC_RMID);
-    shmctl(shmemSM2, IPC_RMID);
+    shmctl(shmemSM1, IPC_RMID, NULL);
+    shmctl(shmemSM2, IPC_RMID, NULL);
+    printf("Process \"zadanie\" finished.\n");
     return 0;
     //---------------------------------------------------------------------------------------------
 }
@@ -189,7 +192,7 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     return processID;
 }
 
-int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1);
+int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1)
 {
     char* proc_tArguments[] = {"proc_t", NULL, NULL, NULL, NULL};
     char* proc_tEnviroment[] = { NULL };
@@ -227,8 +230,8 @@ int proc_s(int shmemSM1, int semaphoreS1, int shmemSM2, int semaphoreS2)
     proc_sArguments[1] = shmemSM1Buffer;
     
     char semaphoreS1ReadBuffer[20];
-    sprintf(semaphoreS1Buffer, "%d", semaphoreS1);
-    proc_sArguments[2] = semaphoreS1Buffer;
+    sprintf(semaphoreS1ReadBuffer, "%d", semaphoreS1);
+    proc_sArguments[2] = semaphoreS1ReadBuffer;
     
     char shmemSM2Buffer[20];
     sprintf(shmemSM2Buffer, "%d", shmemSM2);
@@ -262,13 +265,9 @@ int proc_d(int shmemSM2, int semaphoreS2, int tcpPort)
     sprintf(semaphoreS2Buffer, "%d", semaphoreS2);
     proc_dArguments[2] = semaphoreS2Buffer;
     
-    char semaphoreS2Buffer[20];
-    sprintf(semaphoreS2Buffer, "%d", semaphoreS2);
-    proc_dArguments[3] = semaphoreS2Buffer;
-    
     char tcpPortBuffer[20];
     sprintf(tcpPortBuffer, "%d", tcpPort);
-    proc_dArguments[4] = tcpPortBuffer;
+    proc_dArguments[3] = tcpPortBuffer;
     
     int processID = fork();
     

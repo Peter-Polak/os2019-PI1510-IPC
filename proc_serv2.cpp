@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h> 
 #include <sys/types.h>
 #include <sys/socket.h> 
 #include <arpa/inet.h>
@@ -12,36 +13,41 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <netinet/in.h>
 
 #define IP_ADDRESS "127.0.0.1"
 #define FILE_NAME "p2.txt"
 
 int main(int argc, char const *argv[])
 {
+    printf("Process \"proc_serv2\" started.\n");
+    
     int udpPort = atoi(argv[1]);
     
     //UDP connection for Server 1 - Read
-    int socket;
-    struct sockaddr_in serverAddress;
+    int socketDescriptor;
+    struct sockaddr_in thisAddress;
     struct sockaddr_in requestAddress;
+    socklen_t requestAdressLength = sizeof(struct sockaddr);
+    
     char text[150];
     
     requestAddress.sin_family = AF_INET;
     requestAddress.sin_port = htons(udpPort);
-    inet_aton(IP_ADDRESS, &requestAddress.sin_addr.s_addr);
+    inet_aton(IP_ADDRESS, &requestAddress.sin_addr);
     bzero(&(requestAddress.sin_zero), 8);
     
     thisAddress.sin_family = AF_INET;
     thisAddress.sin_port = htons(udpPort);
-    inet_aton(IP_ADDRESS, &thisAddress.sin_addr.s_addr);
+    inet_aton(IP_ADDRESS, &thisAddress.sin_addr);
     bzero(&(thisAddress.sin_zero), 8);
     
-    socket = socket(AF_INET, SOCK_DGRAM, 0);
-    bind(socket, (struct sockaddr_in *) &serverAddress, sizeof(struct sockaddr_in));
-    //connect(socket, &requestAddress, sizeof(struct sockaddr_in));
+    socketDescriptor = socketDescriptor(AF_INET, SOCK_DGRAM, 0);
+    bind(socketDescriptor, (struct sockaddr *) &serverAddress, sizeof(struct sockaddr));
+    //connect(socketDescriptor, &requestAddress, sizeof(struct sockaddr_in));
     
     //recv();
-    recvfrom(socket, text, 150, 0, &requestAddress, sizeof(struct sockaddr_in)); 
+    recvfrom(socketDescriptor, text, 150, 0, (struct sockaddr *)&requestAddress, (socklen_t *)sizeof(struct sockaddr)); 
     
     //File p2.txt - Write 
     int fileDescriptor;
@@ -50,7 +56,8 @@ int main(int argc, char const *argv[])
     write(fileDescriptor, text, 150);
     
     //Clean up and exit
-    close(socket);
+    close(socketDescriptor);
     close(fileDescriptor);
+    printf("Process \"proc_serv2\" finished.\n");
     exit(0);
 }

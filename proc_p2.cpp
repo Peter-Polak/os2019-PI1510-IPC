@@ -9,6 +9,8 @@
 
 int main(int argc, char const *argv[])
 {
+    printf("Process \"proc_p2\" started.\n");
+    
     int pipeR1Write = atoi(argv[1]);
     
     //Wait for signal SIGUSR1, then continue
@@ -46,5 +48,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     //free(text);
     close(fileDescriptor);
+    printf("Process \"proc_p2\" finished.\n");
     exit(0);
 }

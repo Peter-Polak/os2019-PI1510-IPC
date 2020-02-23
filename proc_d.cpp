@@ -15,15 +15,17 @@
 
 #define IP_ADDRESS "127.0.0.1"
 
-struct sembuf
-{
-    short sem_num;
-    short sem_op;
-    short sem_flg;
-} 
+// struct sembuf
+// {
+//     short sem_num;
+//     short sem_op;
+//     short sem_flg;
+// } 
 
 int main(int argc, char const *argv[])
 {
+    printf("Process \"proc_d\" started.\n");
+    
     int shmemSM2 = atoi(argv[1]);
     int semaphoreS2 = atoi(argv[2]);
     int tcpPort = atoi(argv[3]);
@@ -43,24 +45,25 @@ int main(int argc, char const *argv[])
     
     sharedMemory = (char *) shmat(shmemSM2, NULL, 0);
     
-    strncpy(&text, sharedMemory, 150);
+    strncpy(text, sharedMemory, 150);
     
     //TCP connection to Server 1 - Write
-    int socket;
+    int socketDescriptor;
     struct sockaddr_in serverAddress;
     
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(tcpPort);
-    inet_aton(IP_ADDRESS, &serverAddress.sin_addr.s_addr);
+    inet_aton(IP_ADDRESS, &serverAddress.sin_addr);
     bzero(&(serverAddress.sin_zero), 8);
     
-    socket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    connect(socket, &serverAddress, sizeof(struct sockaddr_in));
+    socketDescriptor = socketDescriptor(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    connect(socketDescriptor, (struct sockaddr *)&serverAddress, sizeof(struct sockaddr));
     
-    write(socket, text, sizeof(text));
+    write(socketDescriptor, text, sizeof(text));
     
     //Clean up and exit
     shmdt(sharedMemory);
-    close(socket);
+    close(socketDescriptor);
+    printf("Process \"proc_d\" finished.\n");
     exit(0);
 }

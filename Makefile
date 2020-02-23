@@ -13,17 +13,17 @@ PCSERV2=proc_serv2
 #PROC=$(basename $(SRCS))
 
 PROC=$(PCP1) $(PCP2) $(PCT) $(PCD) $(PCSERV2)
-SRC=$(sufix .cpp, $(PROC))
-OBJS=$(sufix .o, $(PROC))
+SRC=$(suffix .cpp, $(PROC))
+OBJS=$(suffix .o, $(PROC))
 
 MAIN=zadanie
 
 # targets
-all: $(PROC) $(MAIN) 
+all: $(PROC) $(MAIN)
 	
 
-$(MAIN): $(OBJS)
-	$(CC) $(OBJS) -o $(MAIN)
+# $(MAIN): $(OBJS)
+# 	$(CC) $(OBJS) -o $(MAIN)
 
 
 #create object file for all processes
