@@ -48,4 +48,3 @@ int main(int argc, char const *argv[])
     close(fileDescriptor);
     exit(0);
 }
-}
