@@ -19,7 +19,7 @@ OBJS=$(sufix .o, $(PROC))
 MAIN=zadanie
 
 # targets
-all: $(MAIN) $(PROC)
+all: $(PROC) $(MAIN) 
 	
 
 $(MAIN): $(OBJS)
@@ -28,7 +28,7 @@ $(MAIN): $(OBJS)
 
 #create object file for all processes
 %.o: %.cpp
-    $(CC) -c $^
+	$(CC) -c $^
 	
 #create executable for all processes
 $(PROC): % : %.o
@@ -44,23 +44,23 @@ clean:
 
 
 
-#old
-#proc_p1
-$(PCP1) : $(PCP1).o
-	$(CC) $^ -o $@
+# #old
+# #proc_p1
+# $(PCP1) : $(PCP1).o
+# 	$(CC) $^ -o $@
 
-#proc_p2
-$(PCP2): $(PCP2).o
-	$(CC) $^ -o $@
+# #proc_p2
+# $(PCP2): $(PCP2).o
+# 	$(CC) $^ -o $@
 	
-#proc_t
-$(PCT): $(PCT).o
-	$(CC) $^ -o $@
+# #proc_t
+# $(PCT): $(PCT).o
+# 	$(CC) $^ -o $@
 
-#proc_d
-$(PCD): $(PCD).o
-	$(CC) $^ -o $@
+# #proc_d
+# $(PCD): $(PCD).o
+# 	$(CC) $^ -o $@
 
-#proc_serv2
-$(PCSERV2): $(PCSERV2).o
-	$(CC) $^ -o $@
+# #proc_serv2
+# $(PCSERV2): $(PCSERV2).o
+# 	$(CC) $^ -o $@
