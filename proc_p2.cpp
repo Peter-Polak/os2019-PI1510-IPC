@@ -43,7 +43,7 @@ int main(int argc, char const *argv[])
     
     
     fileDescriptor = open("p2.txt", O_RDONLY); //Open file as read-only
-    if(fileDescriptor == -1) ptintf(ERROR_MESSAGE "open() failed. Reason: %s\n", getpid(), strerror(errno));
+    if(fileDescriptor == -1) printf(ERROR_MESSAGE "open() failed. Reason: %s\n", getpid(), strerror(errno));
 
     //Find a lenghth of a word
     while(buffer != '\n')
