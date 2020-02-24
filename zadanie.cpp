@@ -147,7 +147,7 @@ int proc_p1(int pipeR1Write)
     if (processID == 0)
     {
         int returnValue = execve(proc_p1Arguments[0], proc_p1Arguments, proc_p1Enviroment);
-        if(returnValue == -1) perror("[" PROCESS_NAME " - proc_p1()] (Error) : execve() failed. Reason: ");
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_p1 execve() failed. Reason: ");
     }
     else if(processID == -1)
     {
@@ -173,7 +173,7 @@ int proc_p2(int pipeR1Write)
     if (processID == 0)
     {
         int returnValue = execve(proc_p2Arguments[0], proc_p2Arguments, proc_p2Enviroment);
-        if(returnValue == -1) perror("[" PROCESS_NAME " - proc_p2()] (Error) : execve() failed. Reason: ");
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_p2 execve() failed. Reason: ");
     }
     
     return processID;
@@ -206,7 +206,7 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     if (processID == 0)
     {
         int returnValue = execve(proc_prArguments[0], proc_prArguments, proc_prEnviroment);
-        if(returnValue == -1) perror("[" PROCESS_NAME " - proc_pr()] (Error) : execve() failed. Reason: ");
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_pr execve() failed. Reason: ");
     }
     
     return processID;
