@@ -141,7 +141,7 @@ int main(int argc, char const *argv[])
 
 void signalHandler(int signal)
 {
-    printf(STATUS_MESSAGE "Received signal %d.\n"getpid(), signal);
+    printf(STATUS_MESSAGE "Received signal %d.\n", getpid(), signal);
 }
 
 
