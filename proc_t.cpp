@@ -13,7 +13,7 @@
 #define PROCESS_NAME "proc_t"
 #define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
 #define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
-#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Variable) : "
 
 // struct sembuf
 // {

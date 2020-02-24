@@ -21,7 +21,7 @@
 #define FILE_NAME "p2.txt"
 #define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
 #define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
-#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Variable) : "
 
 int main(int argc, char const *argv[])
 {
