@@ -180,7 +180,7 @@ int proc_p2(int pipeR1Write)
 int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
 {
     char processName[] = "proc_pr";
-    char* proc_prArguments[] = {processName, NULL, NULL, NULL, NULL};
+    char* proc_prArguments[] = {processName, NULL, NULL, NULL, NULL, NULL};
     char* proc_prEnviroment[] = { NULL };
     
     char pidP1Buffer[20];
