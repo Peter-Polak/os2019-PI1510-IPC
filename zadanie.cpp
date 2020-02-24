@@ -15,7 +15,7 @@
 #define PROCESS_NAME "zadanie"
 #define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
 #define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
-#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Variable) : "
 
 union semun
 {
@@ -141,7 +141,7 @@ int main(int argc, char const *argv[])
 
 void signalHandler(int signal)
 {
-    printf(STATUS_MESSAGE "Received signal %d. PID=%d\n", signal, getpid());
+    printf(STATUS_MESSAGE "Received signal %d.\n"getpid(), signal);
 }
 
 
