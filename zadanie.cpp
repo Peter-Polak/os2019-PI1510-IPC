@@ -56,6 +56,7 @@ int main(int argc, char const *argv[])
     int proc_p1ID = proc_p1(pipeR1[1]);
     int proc_p2ID = proc_p2(pipeR1[1]);
     int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
+    sigsuspend(&sigusrMask);
     printf("[" PROCESS_NAME "] (Variable) : proc_p1ID = %d\n", proc_p1ID);
     printf("[" PROCESS_NAME "] (Variable) : proc_p2ID = %d\n", proc_p2ID);
     printf("[" PROCESS_NAME "] (Variable) : proc_prID = %d\n", proc_prID);
@@ -139,6 +140,10 @@ int proc_p1(int pipeR1Write)
     char* proc_p1Enviroment[] = { NULL };
     char sprintfBuffer[20];
     
+    sigset_t sigusrMask;
+    sigfillset(&sigusrMask);
+    sigdelset(&sigusrMask, SIGUSR1);
+    
     sprintf(sprintfBuffer, "%d", pipeR1Write);
     proc_p1Arguments[1] = sprintfBuffer;
     
@@ -162,6 +167,10 @@ int proc_p2(int pipeR1Write)
     char* proc_p2Arguments[] = {processName, NULL, NULL};
     char* proc_p2Enviroment[] = { NULL };
     char sprintfBuffer[20];
+    
+    sigset_t sigusrMask;
+    sigfillset(&sigusrMask);
+    sigdelset(&sigusrMask, SIGUSR1);
     
     sprintf(sprintfBuffer, "%d", pipeR1Write);
     proc_p2Arguments[1] = sprintfBuffer;

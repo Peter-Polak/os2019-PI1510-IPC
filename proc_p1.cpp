@@ -26,7 +26,7 @@ int main(int argc, char const *argv[])
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
     printf("[" PROCESS_NAME "] (Status) : Process suspended until arrival of signal " SIGNAL ".\n");
-    sigsuspend(&sigusrMask);
+    //sigsuspend(&sigusrMask);
     printf("[" PROCESS_NAME "] (Status) : Signal " SIGNAL " received. Process resumed.\n");
     
     
