@@ -10,6 +10,9 @@
 #include <sys/shm.h> 
 
 #define PROCESS_NAME "proc_t"
+#define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
+#define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
 
 // struct sembuf
 // {
@@ -20,7 +23,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
+    printf(STATUS_MESSAGE "Process started.\n", getpid());
     /*for(int i = 0; i < argc; i++)
     {
          printf("%s ", argv[i]);
@@ -34,7 +37,7 @@ int main(int argc, char const *argv[])
     char text[150];
     
     read(pipeR2Read, text, 150);
-    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
+    printf(VARIABLE_MESSAGE "text = %s", getpid(), text);
     
     //Shared memory 1 - Write
     char *sharedMemory = NULL; 
@@ -59,6 +62,6 @@ int main(int argc, char const *argv[])
     
     //Clean up and exit
     shmdt(sharedMemory);
-    printf("[" PROCESS_NAME "] (Status) : Process finished.\n");
+    printf(STATUS_MESSAGE "Process finished.\n", getpid());
     exit(0);
 }

@@ -9,10 +9,13 @@
 
 #define SIGNAL "SIGUSR1"
 #define PROCESS_NAME "proc_p2"
+#define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
+#define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
+    printf(STATUS_MESSAGE "Process started.\n", getpid());
     /*sleep(3);
     for(int i = 0; i < argc; i++)
     {
@@ -25,9 +28,9 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
-    printf("[" PROCESS_NAME "] (Status) : Process suspended until arrival of signal " SIGNAL ".\n");
+    printf(STATUS_MESSAGE "Process suspended until arrival of signal " SIGNAL ".\n", getpid());
     //sigsuspend(&sigusrMask);
-    printf("[" PROCESS_NAME "] (Status) : Signal " SIGNAL " received. Process resumed.\n");
+    printf(STATUS_MESSAGE "Signal " SIGNAL " received. Process resumed.\n", getpid());
     
     
     char buffer;
@@ -38,7 +41,7 @@ int main(int argc, char const *argv[])
     
     
     fileDescriptor = open("p2.txt", O_RDONLY); //Open file as read-only
-    if(fileDescriptor == -1) perror("[" PROCESS_NAME "] (Error) : open() failed. Reason: ");
+    if(fileDescriptor == -1) ptintf(ERROR_MESSAGE "open() failed. Reason: %s\n", getpid(), strerror(errno));
 
     //Find a lenghth of a word
     while(buffer != '\n')
@@ -53,7 +56,7 @@ int main(int argc, char const *argv[])
     //text = (char*) malloc(wordLength);
     read(fileDescriptor, text, wordLength);
     
-    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
+    printf(VARIABLE_MESSAGE "text = %s", getpid(), text);
     
     //Pipe 1 - Write
     write(pipeR1Write, text, wordLength); //Write word to pipe
@@ -61,6 +64,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     //free(text);
     close(fileDescriptor);
-    printf("[" PROCESS_NAME "] (Status) : Process finished.\n");
+    printf(STATUS_MESSAGE "Process finished.\n", getpid());
     exit(0);
 }

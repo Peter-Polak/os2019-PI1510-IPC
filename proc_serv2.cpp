@@ -18,10 +18,13 @@
 #define PROCESS_NAME "proc_serv2"
 #define IP_ADDRESS "127.0.0.1"
 #define FILE_NAME "p2.txt"
+#define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
+#define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
+    printf(STATUS_MESSAGE "Process started.\n", getpid());
     
     int udpPort = atoi(argv[1]);
     
@@ -49,7 +52,7 @@ int main(int argc, char const *argv[])
     
     //recv();
     recvfrom(socketDescriptor, text, 150, 0, (struct sockaddr *)&requestAddress, (socklen_t *)sizeof(struct sockaddr)); 
-    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
+    printf(VARIABLE_MESSAGE "text = %s", getpid(), text);
     
     //File p2.txt - Write 
     int fileDescriptor;
@@ -60,6 +63,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     close(socketDescriptor);
     close(fileDescriptor);
-    printf("[" PROCESS_NAME "] (Status) Process finished.\n");
+    printf(STATUS_MESSAGE "Process finished.\n", getpid());
     exit(0);
 }

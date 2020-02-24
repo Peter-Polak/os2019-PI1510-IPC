@@ -52,29 +52,29 @@ int main(int argc, char const *argv[])
     
     pipe(pipeR1);
     pipe(pipeR2);
-    printf("{%d} [" PROCESS_NAME "] (Variable) : pipeR1 = %d, %d \n", getpid(), pipeR1[0], pipeR1[1]);
-    printf("{%d} [" PROCESS_NAME "] (Variable) : pipeR2 = %d, %d \n", getpid(), pipeR2[0], pipeR2[1]);
+    printf(VARIABLE_MESSAGE "pipeR1 = %d, %d \n", getpid(), pipeR1[0], pipeR1[1]);
+    printf(VARIABLE_MESSAGE "pipeR2 = %d, %d \n", getpid(), pipeR2[0], pipeR2[1]);
     //---------------------------------------------------------------------------------------------
     
     
     //proc_p1, proc_p2, proc_pr
     //---------------------------------------------------------------------------------------------
     int proc_p1ID = proc_p1(pipeR1[1]);
-    printf("{%d} [" PROCESS_NAME "] (Variable) : proc_p1ID = %d\n", getpid(), proc_p1ID);
+    printf(VARIABLE_MESSAGE "proc_p1ID = %d\n", getpid(), proc_p1ID);
     
     int proc_p2ID = proc_p2(pipeR1[1]);
-    printf("{%d} [" PROCESS_NAME "] (Variable) : proc_p2ID = %d\n", getpid(), proc_p2ID);
+    printf(VARIABLE_MESSAGE "proc_p2ID = %d\n", getpid(), proc_p2ID);
     
     int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
-    printf("{%d} [" PROCESS_NAME "] (Variable) : proc_prID = %d\n", getpid(), proc_prID);
+    printf(VARIABLE_MESSAGE "proc_prID = %d\n", getpid(), proc_prID);
     
     sigsuspend(&sigusrMask);
     
-    printf("{%d} [" PROCESS_NAME "] (Status) : Process suspended until \"proc_p1\" exits.\n", getpid());
+    printf(STATUS_MESSAGE "Process suspended until \"proc_p1\" exits.\n", getpid());
     waitpid(proc_p1ID, &childStatus, 0);
-    printf("{%d} [" PROCESS_NAME "] (Status) : Process suspended until \"proc_p2\" exits.\n", getpid());
+    printf(STATUS_MESSAGE "Process suspended until \"proc_p2\" exits.\n", getpid());
     waitpid(proc_p2ID, &childStatus, 0);
-    printf("{%d} [" PROCESS_NAME "] (Status) : Process suspended until \"proc_pr\" exits.\n", getpid());
+    printf(STATUS_MESSAGE "Process suspended until \"proc_pr\" exits.\n", getpid());
     waitpid(proc_prID, &childStatus, 0);
     //---------------------------------------------------------------------------------------------
     
@@ -134,14 +134,14 @@ int main(int argc, char const *argv[])
     semctl(semaphoreS2, 0, IPC_RMID);
     shmctl(shmemSM1, IPC_RMID, NULL);
     shmctl(shmemSM2, IPC_RMID, NULL);
-    printf("{%d} [" PROCESS_NAME "] (Status) : Process finished.\n", getpid());
+    printf(STATUS_MESSAGE "Process finished.\n", getpid());
     return 0;
     //---------------------------------------------------------------------------------------------
 }
 
 void signalHandler(int signal)
 {
-    printf("[" PROCESS_NAME "] (Status) : Received signal %d. PID=%d\n", signal, getpid());
+    printf(STATUS_MESSAGE "Received signal %d. PID=%d\n", signal, getpid());
 }
 
 
@@ -162,7 +162,7 @@ int proc_p1(int pipeR1Write)
     int processID = fork();
     if(processID == -1)
     {
-        printf("{%d} [" PROCESS_NAME "] (Error) : proc_p1 fork() failed. Reason: %s\n", getpid(), strerror(errno));
+        printf(ERROR_MESSAGE "proc_p1 fork() failed. Reason: %s\n", getpid(), strerror(errno));
     }
     
     if (processID == 0)
@@ -171,7 +171,7 @@ int proc_p1(int pipeR1Write)
         int returnValue = execve(proc_p1Arguments[0], proc_p1Arguments, proc_p1Enviroment);
         if(returnValue == -1) 
         {
-            perror("[" PROCESS_NAME "] (Error) : proc_p1 execve() failed. Reason: ");
+            printf(ERROR_MESSAGE "proc_p1 execve() failed. Reason: %s\n", getpid(), strerror(errno));
             exit(1);
         }
     }
@@ -195,7 +195,7 @@ int proc_p2(int pipeR1Write)
     proc_p2Arguments[1] = sprintfBuffer;
     
     int processID = fork();
-    if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_p2 fork() failed. Reason: ");
+    if(processID == -1) perror(ERROR_MESSAGE "proc_p2 fork() failed. Reason: ");
     
     if (processID == 0)
     {
@@ -203,7 +203,7 @@ int proc_p2(int pipeR1Write)
         int returnValue = execve(proc_p2Arguments[0], proc_p2Arguments, proc_p2Enviroment);
         if(returnValue == -1) 
         {
-            perror("[" PROCESS_NAME "] (Error) : proc_p2 execve() failed. Reason: ");
+            printf(ERROR_MESSAGE "proc_p2 execve() failed. Reason: %s\n", getpid(), strerror(errno));
             exit(1);  
         }
     }
@@ -234,14 +234,14 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     proc_prArguments[4] = pipeR2WriteBuffer;
     
     int processID = fork();
-    if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_pr fork() failed. Reason: ");
+    if(processID == -1) perror(ERROR_MESSAGE "proc_pr fork() failed. Reason: ");
     
     if (processID == 0)
     {
         int returnValue = execve(proc_prArguments[0], proc_prArguments, proc_prEnviroment);
         if(returnValue == -1)
         {    
-            perror("[" PROCESS_NAME "] (Error) : proc_pr execve() failed. Reason: ");
+            printf(ERROR_MESSAGE "proc_pr execve() failed. Reason: %s\n", getpid(), strerror(errno));
             exit(1); 
         }
     }
@@ -274,7 +274,7 @@ int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1)
         int returnValue = execve(proc_tArguments[0], proc_tArguments, proc_tEnviroment);
         if(returnValue == -1)
         {
-            perror("[" PROCESS_NAME "] (Error) : proc_t execve() failed. Reason: ");
+            printf(ERROR_MESSAGE "proc_t execve() failed. Reason: %s\n", getpid(), strerror(errno));
             exit(1); 
         }
     }
@@ -312,7 +312,7 @@ int proc_s(int shmemSM1, int semaphoreS1, int shmemSM2, int semaphoreS2)
         int returnValue = execve(proc_sArguments[0], proc_sArguments, proc_sEnviroment);
         if(returnValue == -1)
         {
-            printf("{%d} [" PROCESS_NAME "] (Error) : proc_s execve() failed. Reason: %s\n", getpid(), strerror(errno));
+            printf(ERROR_MESSAGE "proc_s execve() failed. Reason: %s\n", getpid(), strerror(errno));
             exit(1);
         }
     }
@@ -346,7 +346,7 @@ int proc_d(int shmemSM2, int semaphoreS2, int tcpPort)
         int returnValue = execve(proc_dArguments[0], proc_dArguments, proc_dEnviroment);
         if(returnValue == -1)
         {
-            printf("{%d} [" PROCESS_NAME "] (Error) : proc_s execve() failed. Reason: %s\n", getpid(), strerror(errno));
+            printf(ERROR_MESSAGE "proc_s execve() failed. Reason: %s\n", getpid(), strerror(errno));
         }
     }
     
@@ -375,7 +375,7 @@ int proc_serv1(int tcpPort, int udpPort)
         int returnValue = execve(proc_serv1Arguments[0], proc_serv1Arguments, proc_serv1Enviroment);
         if(returnValue == -1)
         {
-            printf("{%d} [" PROCESS_NAME "] (Error) : proc_serv1 execve() failed. Reason: %s\n", getpid(), strerror(errno));
+            printf(ERROR_MESSAGE "proc_serv1 execve() failed. Reason: %s\n", getpid(), strerror(errno));
         }
     }
     
@@ -400,7 +400,7 @@ int proc_serv2(int udpPort)
         int returnValue = execve(proc_serv2Arguments[0], proc_serv2Arguments, proc_serv2Enviroment);
         if(returnValue == -1)
         {
-            printf("{%d} [" PROCESS_NAME "] (Error) : proc_serv2 execve() failed. Reason: %s\n", getpid(), strerror(errno));
+            printf(ERROR_MESSAGE "proc_serv2 execve() failed. Reason: %s\n", getpid(), strerror(errno));
         }
     }
     

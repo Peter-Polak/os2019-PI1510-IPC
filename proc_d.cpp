@@ -15,6 +15,9 @@
 
 #define PROCESS_NAME "proc_d"
 #define IP_ADDRESS "127.0.0.1"
+#define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
+#define ERROR_MESSAGE "{%d} [" PROCESS_NAME "] (Error) : "
+#define VARIABLE_MESSAGE "{%d} [" PROCESS_NAME "] (Bariable) : "
 
 // struct sembuf
 // {
@@ -25,7 +28,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
+    printf(STATUS_MESSAGE "Process started.\n", getpid());
     
     int shmemSM2 = atoi(argv[1]);
     int semaphoreS2 = atoi(argv[2]);
@@ -47,7 +50,7 @@ int main(int argc, char const *argv[])
     sharedMemory = (char *) shmat(shmemSM2, NULL, 0);
     
     strncpy(text, sharedMemory, 150);
-    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
+    printf(VARIABLE_MESSAGE "text = %s", getpid(), text);
     
     //TCP connection to Server 1 - Write
     int socketDescriptor;
@@ -66,6 +69,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     shmdt(sharedMemory);
     close(socketDescriptor);
-    printf("[" PROCESS_NAME "] (Status) Process finished.\n");
+    printf(STATUS_MESSAGE "Process finished.\n", getpid());
     exit(0);
 }
