@@ -199,7 +199,7 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     sprintf(pipeR2WriteBuffer, "%d", pipeR2Write);
     proc_prArguments[4] = pipeR2WriteBuffer;
     
-    printf("[" PROCESS_NAME "] (Variable) : proc_prArguments = %s %s %s %s", proc_prArguments[0], proc_prArguments[1], proc_prArguments[2], proc_prArguments[3]);
+    printf("[" PROCESS_NAME "] (Variable) : proc_prArguments = %s %s %s %s %s\n", proc_prArguments[0], proc_prArguments[1], proc_prArguments[2], proc_prArguments[3], proc_prArguments[4]);
     
     int processID = fork();
     if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_pr fork() failed. Reason: ");
