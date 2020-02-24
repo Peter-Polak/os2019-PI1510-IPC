@@ -38,6 +38,7 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
+    signal(SIGUSR1, signalHandler);
     
     //Pipes
     //---------------------------------------------------------------------------------------------
@@ -220,6 +221,11 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     }
     
     return processID;
+}
+
+void signalHandler()
+{
+    printf("[" PROCESS_NAME "] (Status) : Received signal SIGUSR1. PID=%d\n", getpid());
 }
 
 int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1)
