@@ -9,7 +9,8 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <signal.h>
-#include <errno.h> 
+#include <errno.h>
+#include <string.h>
 
 #define PROCESS_NAME "zadanie"
 #define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
@@ -159,7 +160,10 @@ int proc_p1(int pipeR1Write)
     proc_p1Arguments[1] = sprintfBuffer;
     
     int processID = fork();
-    if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_p1 fork() failed. Reason: ", getpid(), );
+    if(processID == -1)
+    {
+        printf("{%d} [" PROCESS_NAME "] (Error) : proc_p1 fork() failed. Reason: %s\n", getpid(), strerror(errno));
+    }
     
     if (processID == 0)
     {
