@@ -52,7 +52,7 @@ int main(int argc, char const *argv[])
     //text = (char*) malloc(wordLength);
     read(fileDescriptor, text, wordLength);
     
-    printf("[" PROCESS_NAME "] : text = %s", text);
+    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
     
     write(pipeR1Write, text, wordLength); //Write word to pipe
     

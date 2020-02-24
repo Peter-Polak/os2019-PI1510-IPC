@@ -12,7 +12,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] : Process started.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
     /*for(int i = 0; i < argc; i++)
     {
          printf("%s ", argv[i]);
@@ -24,9 +24,9 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
-    printf("[" PROCESS_NAME "] : Process suspended until arrival of signal " SIGNAL ".\n");
+    printf("[" PROCESS_NAME "] (Status) : Process suspended until arrival of signal " SIGNAL ".\n");
     sigsuspend(&sigusrMask);
-    printf("[" PROCESS_NAME "] : Signal " SIGNAL " received. Process resumed.\n");
+    printf("[" PROCESS_NAME "] (Status) : Signal " SIGNAL " received. Process resumed.\n");
     
     
     char buffer;
@@ -51,7 +51,7 @@ int main(int argc, char const *argv[])
     //text = (char*) malloc(wordLength);
     read(fileDescriptor, text, wordLength);
     
-    printf("[" PROCESS_NAME "] : text = %s", text);
+    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
     
     //Pipe 1 - Write
     write(pipeR1Write, text, wordLength); //Write word to pipe
@@ -59,6 +59,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     //free(text);
     close(fileDescriptor);
-    printf("[" PROCESS_NAME "] Process finished.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process finished.\n");
     exit(0);
 }

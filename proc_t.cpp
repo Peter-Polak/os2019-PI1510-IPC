@@ -20,7 +20,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] : Process started.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
     /*for(int i = 0; i < argc; i++)
     {
          printf("%s ", argv[i]);
@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
     char text[150];
     
     read(pipeR2Read, text, 150);
-    printf("[" PROCESS_NAME "] : text = %s", text);
+    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
     
     //Shared memory 1 - Write
     char *sharedMemory = NULL; 
@@ -58,6 +58,6 @@ int main(int argc, char const *argv[])
     
     //Clean up and exit
     shmdt(sharedMemory);
-    printf("[" PROCESS_NAME "] Process finished.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process finished.\n");
     exit(0);
 }

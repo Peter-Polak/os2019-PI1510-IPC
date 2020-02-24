@@ -21,7 +21,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] : Process started.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
     
     int udpPort = atoi(argv[1]);
     
@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
     
     //recv();
     recvfrom(socketDescriptor, text, 150, 0, (struct sockaddr *)&requestAddress, (socklen_t *)sizeof(struct sockaddr)); 
-    printf("[" PROCESS_NAME "] : text = %s", text);
+    printf("[" PROCESS_NAME "] (Variable) : text = %s", text);
     
     //File p2.txt - Write 
     int fileDescriptor;
@@ -60,6 +60,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     close(socketDescriptor);
     close(fileDescriptor);
-    printf("[" PROCESS_NAME "] Process finished.\n");
+    printf("[" PROCESS_NAME "] (Status) Process finished.\n");
     exit(0);
 }
