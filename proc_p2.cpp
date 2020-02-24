@@ -13,15 +13,11 @@
 int main(int argc, char const *argv[])
 {
     printf("[" PROCESS_NAME "] (Status) : Process started.\n");
+    /*sleep(3);
     for(int i = 0; i < argc; i++)
     {
-         printf("Argv[%d] = %s", i, argv[i]);
-    }
-    sleep(10);
-    for(int i = 0; i < argc; i++)
-    {
-         printf("Argv[%d] = %s", i, argv[i]);
-    }
+         printf("Argv[%d] = %s\n", i, argv[i]);
+    }*/
     
     int pipeR1Write = atoi(argv[1]);
     
