@@ -30,7 +30,7 @@ int proc_serv2(int udpPort);
 
 int main(int argc, char const *argv[])
 {
-    printf("[" PROCESS_NAME "] : Process started.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process started.\n");
     
     //struct siginfo_t response;
     int childStatus;
@@ -45,8 +45,8 @@ int main(int argc, char const *argv[])
     
     pipe(pipeR1);
     pipe(pipeR2);
-    printf("[" PROCESS_NAME "] : pipeR1 = %d, %d \n", pipeR1[0], pipeR1[1]);
-    printf("[" PROCESS_NAME "] : pipeR2 = %d, %d \n", pipeR2[0], pipeR2[1]);
+    printf("[" PROCESS_NAME "] (Variable) : pipeR1 = %d, %d \n", pipeR1[0], pipeR1[1]);
+    printf("[" PROCESS_NAME "] (Variable) : pipeR2 = %d, %d \n", pipeR2[0], pipeR2[1]);
     //---------------------------------------------------------------------------------------------
     
     
@@ -55,15 +55,15 @@ int main(int argc, char const *argv[])
     int proc_p1ID = proc_p1(pipeR1[1]);
     int proc_p2ID = proc_p2(pipeR1[1]);
     int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
-    printf("[" PROCESS_NAME "] : proc_p1ID = %d\n", proc_p1ID);
-    printf("[" PROCESS_NAME "] : proc_p2ID = %d\n", proc_p2ID);
-    printf("[" PROCESS_NAME "] : proc_prID = %d\n", proc_prID);
+    printf("[" PROCESS_NAME "] (Variable) : proc_p1ID = %d\n", proc_p1ID);
+    printf("[" PROCESS_NAME "] (Variable) : proc_p2ID = %d\n", proc_p2ID);
+    printf("[" PROCESS_NAME "] (Variable) : proc_prID = %d\n", proc_prID);
     
-    printf("[" PROCESS_NAME "] : Process suspended until \"proc_p1\" exits.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process suspended until \"proc_p1\" exits.\n");
     waitpid(proc_p1ID, &childStatus, 0);
-    printf("[" PROCESS_NAME "] : Process suspended until \"proc_p2\" exits.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process suspended until \"proc_p2\" exits.\n");
     waitpid(proc_p2ID, &childStatus, 0);
-    printf("[" PROCESS_NAME "] : Process suspended until \"proc_pr\" exits.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process suspended until \"proc_pr\" exits.\n");
     waitpid(proc_prID, &childStatus, 0);
     //---------------------------------------------------------------------------------------------
     
@@ -124,7 +124,7 @@ int main(int argc, char const *argv[])
     semctl(semaphoreS2, 0, IPC_RMID);
     shmctl(shmemSM1, IPC_RMID, NULL);
     shmctl(shmemSM2, IPC_RMID, NULL);
-    printf("[" PROCESS_NAME "] Process finished.\n");
+    printf("[" PROCESS_NAME "] (Status) : Process finished.\n");
     return 0;
     //---------------------------------------------------------------------------------------------
 }
@@ -146,7 +146,12 @@ int proc_p1(int pipeR1Write)
     
     if (processID == 0)
     {
-        execve(proc_p1Arguments[0], proc_p1Arguments, proc_p1Enviroment);
+        int returnValue = execve(proc_p1Arguments[0], proc_p1Arguments, proc_p1Enviroment);
+        if(returnValue == -1) printf("[" PROCESS_NAME "] (Error) : execve() failed.\n");
+    }
+    else if(processID == -1)
+    {
+        exit(1);
     }
     
     return processID;
@@ -167,7 +172,8 @@ int proc_p2(int pipeR1Write)
     
     if (processID == 0)
     {
-        execve(proc_p2Arguments[0], proc_p2Arguments, proc_p2Enviroment);
+        int returnValue = execve(proc_p2Arguments[0], proc_p2Arguments, proc_p2Enviroment);
+        if(returnValue == -1) printf("[" PROCESS_NAME "] (Error) : execve() failed.\n");
     }
     
     return processID;
@@ -199,7 +205,8 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     
     if (processID == 0)
     {
-        execve(proc_prArguments[0], proc_prArguments, proc_prEnviroment);
+        int returnValue = execve(proc_prArguments[0], proc_prArguments, proc_prEnviroment);
+        if(returnValue == -1) printf("[" PROCESS_NAME "] (Error) : execve() failed.\n");
     }
     
     return processID;
