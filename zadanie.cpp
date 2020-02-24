@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
-    signal(SIGUSR1, signalHandler);
+    //signal(SIGUSR1, signalHandler);
     
     //Pipes
     //---------------------------------------------------------------------------------------------
