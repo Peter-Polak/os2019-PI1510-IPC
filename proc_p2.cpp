@@ -38,7 +38,8 @@ int main(int argc, char const *argv[])
     
     
     fileDescriptor = open("p2.txt", O_RDONLY); //Open file as read-only
-    
+    if(fileDescriptor == -1) perror("[" PROCESS_NAME "] (Error) : open() failed. Reason: ");
+
     //Find a lenghth of a word
     while(buffer != '\n')
     {

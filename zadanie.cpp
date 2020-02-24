@@ -199,6 +199,8 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     sprintf(pipeR2WriteBuffer, "%d", pipeR2Write);
     proc_prArguments[4] = pipeR2WriteBuffer;
     
+    printf("[" PROCESS_NAME "] (Variable) : proc_prArguments = %s %s %s %s", proc_prArguments[0], proc_prArguments[1], proc_prArguments[2], proc_prArguments[3]);
+    
     int processID = fork();
     if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_pr fork() failed. Reason: ");
     
@@ -233,7 +235,8 @@ int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1)
     
     if (processID == 0)
     {
-        execve(proc_tArguments[0], proc_tArguments, proc_tEnviroment);
+        int returnValue = execve(proc_tArguments[0], proc_tArguments, proc_tEnviroment);
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_t execve() failed. Reason: ");
     }
     
     return processID;
@@ -266,7 +269,8 @@ int proc_s(int shmemSM1, int semaphoreS1, int shmemSM2, int semaphoreS2)
     
     if (processID == 0)
     {
-        execve(proc_sArguments[0], proc_sArguments, proc_sEnviroment);
+        int returnValue = execve(proc_sArguments[0], proc_sArguments, proc_sEnviroment);
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_s execve() failed. Reason: ");
     }
     
     return processID;
@@ -295,7 +299,8 @@ int proc_d(int shmemSM2, int semaphoreS2, int tcpPort)
     
     if (processID == 0)
     {
-        execve(proc_dArguments[0], proc_dArguments, proc_dEnviroment);
+        int returnValue = execve(proc_dArguments[0], proc_dArguments, proc_dEnviroment);
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_d execve() failed. Reason: ");
     }
     
     return processID;
@@ -320,7 +325,8 @@ int proc_serv1(int tcpPort, int udpPort)
     
     if (processID == 0)
     {
-        execve(proc_serv1Arguments[0], proc_serv1Arguments, proc_serv1Enviroment);
+        int returnValue = execve(proc_serv1Arguments[0], proc_serv1Arguments, proc_serv1Enviroment);
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_serv1 execve() failed. Reason: ");
     }
     
     return processID;
@@ -341,7 +347,8 @@ int proc_serv2(int udpPort)
     
     if (processID == 0)
     {
-        execve(proc_serv2Arguments[0], proc_serv2Arguments, proc_serv2Enviroment);
+        int returnValue = execve(proc_serv2Arguments[0], proc_serv2Arguments, proc_serv2Enviroment);
+        if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_serv2 execve() failed. Reason: ");
     }
     
     return processID;

@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
     char *sharedMemory = NULL; 
     
     sharedMemory = (char*) shmat(shmemSM1, NULL, 0);
+    if(sharedMemory == -1) perror("[" PROCESS_NAME "] (Error) : shmat() failed. Reason: ");
     
     strncpy(sharedMemory, text, 150);
     
