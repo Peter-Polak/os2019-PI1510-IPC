@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
-    //signal(SIGUSR1, signalHandler);
+    signal(SIGUSR1, signalHandler);
     
     //Pipes
     //---------------------------------------------------------------------------------------------
@@ -56,12 +56,15 @@ int main(int argc, char const *argv[])
     //proc_p1, proc_p2, proc_pr
     //---------------------------------------------------------------------------------------------
     int proc_p1ID = proc_p1(pipeR1[1]);
-    int proc_p2ID = proc_p2(pipeR1[1]);
-    int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
-    sigsuspend(&sigusrMask);
     printf("[" PROCESS_NAME "] (Variable) : proc_p1ID = %d\n", proc_p1ID);
+    
+    int proc_p2ID = proc_p2(pipeR1[1]);
     printf("[" PROCESS_NAME "] (Variable) : proc_p2ID = %d\n", proc_p2ID);
+    
+    int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
     printf("[" PROCESS_NAME "] (Variable) : proc_prID = %d\n", proc_prID);
+    
+    sigsuspend(&sigusrMask);
     
     printf("[" PROCESS_NAME "] (Status) : Process suspended until \"proc_p1\" exits.\n");
     waitpid(proc_p1ID, &childStatus, 0);
@@ -134,7 +137,7 @@ int main(int argc, char const *argv[])
 
 void signalHandler(int signal)
 {
-    printf("[" PROCESS_NAME "] (Status) : Received signal SIGUSR1. PID=%d\n", getpid());
+    printf("[" PROCESS_NAME "] (Status) : Received signal %d. PID=%d\n", signal, getpid());
 }
 
 
