@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
     {
          printf("Argv[%d] = %s", i, argv[i]);
     }
-    sleep(10000);
+    sleep(10);
     for(int i = 0; i < argc; i++)
     {
          printf("Argv[%d] = %s", i, argv[i]);
