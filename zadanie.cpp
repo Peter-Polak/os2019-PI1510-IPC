@@ -124,7 +124,7 @@ int main(int argc, char const *argv[])
     semctl(semaphoreS2, 0, IPC_RMID);
     shmctl(shmemSM1, IPC_RMID, NULL);
     shmctl(shmemSM2, IPC_RMID, NULL);
-    printf("Process \"zadanie\" finished.\n");
+    printf("[" PROCESS_NAME "] Process finished.\n");
     return 0;
     //---------------------------------------------------------------------------------------------
 }

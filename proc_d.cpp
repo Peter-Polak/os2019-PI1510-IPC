@@ -13,6 +13,7 @@
 #include <sys/socket.h> 
 #include <arpa/inet.h>
 
+#define PROCESS_NAME "proc_d"
 #define IP_ADDRESS "127.0.0.1"
 
 // struct sembuf
@@ -24,7 +25,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("Process \"proc_d\" started.\n");
+    printf("[" PROCESS_NAME "] : Process started.\n");
     
     int shmemSM2 = atoi(argv[1]);
     int semaphoreS2 = atoi(argv[2]);
@@ -46,6 +47,7 @@ int main(int argc, char const *argv[])
     sharedMemory = (char *) shmat(shmemSM2, NULL, 0);
     
     strncpy(text, sharedMemory, 150);
+    printf("[" PROCESS_NAME "] : text = %s", text);
     
     //TCP connection to Server 1 - Write
     int socketDescriptor;
@@ -64,6 +66,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     shmdt(sharedMemory);
     close(socketDescriptor);
-    printf("Process \"proc_d\" finished.\n");
+    printf("[" PROCESS_NAME "] Process finished.\n");
     exit(0);
 }

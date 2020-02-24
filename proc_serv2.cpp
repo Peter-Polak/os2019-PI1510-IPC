@@ -15,12 +15,13 @@
 #include <signal.h>
 #include <netinet/in.h>
 
+#define PROCESS_NAME "proc_serv2"
 #define IP_ADDRESS "127.0.0.1"
 #define FILE_NAME "p2.txt"
 
 int main(int argc, char const *argv[])
 {
-    printf("Process \"proc_serv2\" started.\n");
+    printf("[" PROCESS_NAME "] : Process started.\n");
     
     int udpPort = atoi(argv[1]);
     
@@ -48,6 +49,7 @@ int main(int argc, char const *argv[])
     
     //recv();
     recvfrom(socketDescriptor, text, 150, 0, (struct sockaddr *)&requestAddress, (socklen_t *)sizeof(struct sockaddr)); 
+    printf("[" PROCESS_NAME "] : text = %s", text);
     
     //File p2.txt - Write 
     int fileDescriptor;
@@ -58,6 +60,6 @@ int main(int argc, char const *argv[])
     //Clean up and exit
     close(socketDescriptor);
     close(fileDescriptor);
-    printf("Process \"proc_serv2\" finished.\n");
+    printf("[" PROCESS_NAME "] Process finished.\n");
     exit(0);
 }
