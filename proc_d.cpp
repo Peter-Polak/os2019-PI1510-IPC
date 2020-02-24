@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h> 
 #include <arpa/inet.h>
+#include <errno.h>
 
 #define PROCESS_NAME "proc_d"
 #define IP_ADDRESS "127.0.0.1"

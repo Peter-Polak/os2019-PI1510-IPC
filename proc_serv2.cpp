@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <netinet/in.h>
+#include <errno.h>
 
 #define PROCESS_NAME "proc_serv2"
 #define IP_ADDRESS "127.0.0.1"

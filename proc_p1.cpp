@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <errno.h>
+#include <string.h>
 
 #define SIGNAL "SIGUSR1"
 #define PROCESS_NAME "proc_p1"

@@ -7,7 +7,8 @@
 #include <fcntl.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#include <sys/shm.h> 
+#include <sys/shm.h>
+#include <errno.h>
 
 #define PROCESS_NAME "proc_t"
 #define STATUS_MESSAGE "{%d} [" PROCESS_NAME "] (Status) : "
