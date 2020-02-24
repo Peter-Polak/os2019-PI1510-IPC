@@ -9,6 +9,7 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <errno.h> 
 
 #define PROCESS_NAME "zadanie"
 
@@ -93,7 +94,6 @@ int main(int argc, char const *argv[])
     //proc_t, proc_s
     //---------------------------------------------------------------------------------------------
     int proc_sID = proc_s(shmemSM1, semaphoreS1, shmemSM2, semaphoreS2);
-    sigsuspend(&sigusrMask);
     int proc_tID = proc_t(pipeR2[0], shmemSM1, semaphoreS1);
 
     waitpid(proc_tID, &childStatus, 0);
@@ -147,6 +147,7 @@ int proc_p1(int pipeR1Write)
     
     if (processID == 0)
     {
+        sigsuspend(&sigusrMask);
         int returnValue = execve(proc_p1Arguments[0], proc_p1Arguments, proc_p1Enviroment);
         if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_p1 execve() failed. Reason: ");
     }
@@ -170,6 +171,7 @@ int proc_p2(int pipeR1Write)
     
     if (processID == 0)
     {
+        sigsuspend(&sigusrMask);
         int returnValue = execve(proc_p2Arguments[0], proc_p2Arguments, proc_p2Enviroment);
         if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_p2 execve() failed. Reason: ");
     }
@@ -198,8 +200,6 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     char pipeR2WriteBuffer[20];
     sprintf(pipeR2WriteBuffer, "%d", pipeR2Write);
     proc_prArguments[4] = pipeR2WriteBuffer;
-    
-    printf("[" PROCESS_NAME "] (Variable) : proc_prArguments = %s %s %s %s %s\n", proc_prArguments[0], proc_prArguments[1], proc_prArguments[2], proc_prArguments[3], proc_prArguments[4]);
     
     int processID = fork();
     if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_pr fork() failed. Reason: ");
