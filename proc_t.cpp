@@ -19,6 +19,10 @@
 int main(int argc, char const *argv[])
 {
     printf("Process \"proc_t\" started.\n");
+    for(int i = 0; i < argc; i++)
+    {
+         printf("%s ", argv[i]);
+    }
     
     int pipeR2Read = atoi(argv[1]);
     int shmemSM1 = atoi(argv[2]);

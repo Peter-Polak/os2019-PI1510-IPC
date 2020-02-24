@@ -7,9 +7,16 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#define SIGNAL "SIGUSR1"
+#define PROCESS_NAME "proc_p2"
+
 int main(int argc, char const *argv[])
 {
-    printf("Process \"proc_p2\" started.\n");
+    printf("[" PROCESS_NAME "] : Process started.\n");
+    /*for(int i = 0; i < argc; i++)
+    {
+         printf("%s ", argv[i]);
+    }*/
     
     int pipeR1Write = atoi(argv[1]);
     
@@ -17,7 +24,9 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
+    printf("[" PROCESS_NAME "] : Process suspended until arrival of signal " SIGNAL ".\n");
     sigsuspend(&sigusrMask);
+    printf("[" PROCESS_NAME "] : Signal " SIGNAL " received. Process resumed.\n");
     
     
     char buffer;
@@ -42,12 +51,14 @@ int main(int argc, char const *argv[])
     //text = (char*) malloc(wordLength);
     read(fileDescriptor, text, wordLength);
     
+    printf("[" PROCESS_NAME "] : text = %s", text);
+    
     //Pipe 1 - Write
     write(pipeR1Write, text, wordLength); //Write word to pipe
     
     //Clean up and exit
     //free(text);
     close(fileDescriptor);
-    printf("Process \"proc_p2\" finished.\n");
+    printf("[" PROCESS_NAME "] Process finished.\n");
     exit(0);
 }

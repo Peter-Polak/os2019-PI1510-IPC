@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
     inet_aton(IP_ADDRESS, &serverAddress.sin_addr);
     bzero(&(serverAddress.sin_zero), 8);
     
-    socketDescriptor = socketDescriptor(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    socketDescriptor = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     connect(socketDescriptor, (struct sockaddr *)&serverAddress, sizeof(struct sockaddr));
     
     write(socketDescriptor, text, sizeof(text));

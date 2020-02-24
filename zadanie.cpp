@@ -10,6 +10,8 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#define PROCESS_NAME "proc_p1"
+
 union semun
 {
     int              val;    /* Value for SETVAL */
@@ -28,7 +30,7 @@ int proc_serv2(int udpPort);
 
 int main(int argc, char const *argv[])
 {
-    printf("Process \"zadanie\" started.\n");
+    printf("[" PROCESS_NAME "] : Process started.\n");
     
     //struct siginfo_t response;
     int childStatus;
@@ -43,6 +45,8 @@ int main(int argc, char const *argv[])
     
     pipe(pipeR1);
     pipe(pipeR2);
+    printf("[" PROCESS_NAME "] : pipeR1 = %d, %d \n", pipeR1[0], pipeR1[1]);
+    printf("[" PROCESS_NAME "] : pipeR2 = %d, %d \n", pipeR2[0], pipeR2[1]);
     //---------------------------------------------------------------------------------------------
     
     
@@ -51,9 +55,15 @@ int main(int argc, char const *argv[])
     int proc_p1ID = proc_p1(pipeR1[1]);
     int proc_p2ID = proc_p2(pipeR1[1]);
     int proc_prID = proc_pr(proc_p1ID, proc_p2ID, pipeR1[0], pipeR2[1]);
+    printf("[" PROCESS_NAME "] : proc_p1ID = %d\n", proc_p1ID);
+    printf("[" PROCESS_NAME "] : proc_p2ID = %d\n", proc_p2ID);
+    printf("[" PROCESS_NAME "] : proc_prID = %d\n", proc_prID);
     
+    printf("[" PROCESS_NAME "] : Process suspended until \"proc_p1\" exits.\n");
     waitpid(proc_p1ID, &childStatus, 0);
+    printf("[" PROCESS_NAME "] : Process suspended until \"proc_p2\" exits.\n");
     waitpid(proc_p2ID, &childStatus, 0);
+    printf("[" PROCESS_NAME "] : Process suspended until \"proc_pr\" exits.\n");
     waitpid(proc_prID, &childStatus, 0);
     //---------------------------------------------------------------------------------------------
     
@@ -124,7 +134,8 @@ int main(int argc, char const *argv[])
 
 int proc_p1(int pipeR1Write)
 {
-    char* proc_p1Arguments[] = {"proc_p1", NULL, NULL};
+    char processName[] = "proc_p1";
+    char* proc_p1Arguments[] = {processName, NULL, NULL};
     char* proc_p1Enviroment[] = { NULL };
     char sprintfBuffer[20];
     
@@ -144,7 +155,8 @@ int proc_p1(int pipeR1Write)
 
 int proc_p2(int pipeR1Write)
 {
-    char* proc_p2Arguments[] = {"proc_p2", NULL, NULL};
+    char processName[] = "proc_p2";
+    char* proc_p2Arguments[] = {processName, NULL, NULL};
     char* proc_p2Enviroment[] = { NULL };
     char sprintfBuffer[20];
     
@@ -163,7 +175,8 @@ int proc_p2(int pipeR1Write)
 
 int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
 {
-    char* proc_prArguments[] = {"proc_pr", NULL, NULL, NULL, NULL, NULL};
+    char processName[] = "proc_pr";
+    char* proc_prArguments[] = {processName, NULL, NULL, NULL, NULL, NULL};
     char* proc_prEnviroment[] = { NULL };
     
     char pidP1Buffer[20];
@@ -194,7 +207,8 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
 
 int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1)
 {
-    char* proc_tArguments[] = {"proc_t", NULL, NULL, NULL, NULL};
+    char processName[] = "proc_t";
+    char* proc_tArguments[] = {processName, NULL, NULL, NULL, NULL};
     char* proc_tEnviroment[] = { NULL };
     
     char pipeR2ReadBuffer[20];
@@ -222,7 +236,8 @@ int proc_t(int pipeR2Read, int shmemSM1, int semaphoreS1)
 
 int proc_s(int shmemSM1, int semaphoreS1, int shmemSM2, int semaphoreS2)
 {
-    char* proc_sArguments[] = {"proc_s", NULL, NULL, NULL, NULL, NULL};
+    char processName[] = "proc_s";
+    char* proc_sArguments[] = {processName, NULL, NULL, NULL, NULL, NULL};
     char* proc_sEnviroment[] = { NULL };
     
     char shmemSM1Buffer[20];
@@ -254,7 +269,8 @@ int proc_s(int shmemSM1, int semaphoreS1, int shmemSM2, int semaphoreS2)
 
 int proc_d(int shmemSM2, int semaphoreS2, int tcpPort)
 {
-    char* proc_dArguments[] = {"proc_d", NULL, NULL, NULL, NULL};
+    char processName[] = "proc_d";
+    char* proc_dArguments[] = {processName, NULL, NULL, NULL, NULL};
     char* proc_dEnviroment[] = { NULL };
     
     char shmemSM2Buffer[20];
@@ -282,7 +298,8 @@ int proc_d(int shmemSM2, int semaphoreS2, int tcpPort)
 
 int proc_serv1(int tcpPort, int udpPort)
 {
-    char* proc_serv1Arguments[] = {"proc_serv1", NULL, NULL, NULL};
+    char processName[] = "proc_serv1";
+    char* proc_serv1Arguments[] = {processName, NULL, NULL, NULL};
     char* proc_serv1Enviroment[] = { NULL };
     
     char tcpPortBuffer[20];
@@ -306,7 +323,8 @@ int proc_serv1(int tcpPort, int udpPort)
 
 int proc_serv2(int udpPort)
 {
-    char* proc_serv2Arguments[] = {"proc_serv2", NULL, NULL};
+    char processName[] = "proc_serv2";
+    char* proc_serv2Arguments[] = {processName, NULL, NULL};
     char* proc_serv2Enviroment[] = { NULL };
     
     char udpPortBuffer[20];

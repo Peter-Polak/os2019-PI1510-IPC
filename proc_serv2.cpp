@@ -42,8 +42,8 @@ int main(int argc, char const *argv[])
     inet_aton(IP_ADDRESS, &thisAddress.sin_addr);
     bzero(&(thisAddress.sin_zero), 8);
     
-    socketDescriptor = socketDescriptor(AF_INET, SOCK_DGRAM, 0);
-    bind(socketDescriptor, (struct sockaddr *) &serverAddress, sizeof(struct sockaddr));
+    socketDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
+    bind(socketDescriptor, (struct sockaddr *) &thisAddress, sizeof(struct sockaddr));
     //connect(socketDescriptor, &requestAddress, sizeof(struct sockaddr_in));
     
     //recv();
