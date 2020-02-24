@@ -143,15 +143,12 @@ int proc_p1(int pipeR1Write)
     proc_p1Arguments[1] = sprintfBuffer;
     
     int processID = fork();
+    if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_p1 fork() failed. Reason: ");
     
     if (processID == 0)
     {
         int returnValue = execve(proc_p1Arguments[0], proc_p1Arguments, proc_p1Enviroment);
         if(returnValue == -1) perror("[" PROCESS_NAME "] (Error) : proc_p1 execve() failed. Reason: ");
-    }
-    else if(processID == -1)
-    {
-        exit(1);
     }
     
     return processID;
@@ -169,6 +166,7 @@ int proc_p2(int pipeR1Write)
     proc_p2Arguments[1] = sprintfBuffer;
     
     int processID = fork();
+    if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_p2 fork() failed. Reason: ");
     
     if (processID == 0)
     {
@@ -202,6 +200,7 @@ int proc_pr(int pidP1, int pidP2, int pipeR1Read, int pipeR2Write)
     proc_prArguments[4] = pipeR2WriteBuffer;
     
     int processID = fork();
+    if(processID == -1) perror("[" PROCESS_NAME "] (Error) : proc_pr fork() failed. Reason: ");
     
     if (processID == 0)
     {
