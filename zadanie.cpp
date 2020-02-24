@@ -20,7 +20,7 @@ union semun
     unsigned short  *array;  /* Array for GETALL, SETALL */
 };
 
-void signalHandler();
+void signalHandler(int signal);
 int proc_p1(int pipeR1Write);
 int proc_p2(int pipeR1Write);
 int proc_pr(int pidP1,int pidP2, int pipeR1Read, int pipeR2Write);
@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
     sigset_t sigusrMask;
     sigfillset(&sigusrMask);
     sigdelset(&sigusrMask, SIGUSR1);
-    sigaction(SIGUSR1, signalHandler, NULL);
+    signal(SIGUSR1, signalHandler);
     
     //Pipes
     //---------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ int main(int argc, char const *argv[])
     //---------------------------------------------------------------------------------------------
 }
 
-void signalHandler()
+void signalHandler(int signal)
 {
     printf("[" PROCESS_NAME "] (Status) : Received signal SIGUSR1. PID=%d\n", getpid());
 }
