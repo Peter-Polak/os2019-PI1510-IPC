@@ -10,7 +10,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-#define PROCESS_NAME "proc_p1"
+#define PROCESS_NAME "zadanie"
 
 union semun
 {
